@@ -18,7 +18,7 @@ struct MyDeviceListRow: View {
         ZStack{
             
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.nearDevice)
+                .fill(rowColor())
                 .shadow(color: Color(UIColor.black.withAlphaComponent(0.6)),
                 radius: 5, x: 3, y: 4)
             
@@ -42,9 +42,9 @@ struct MyDeviceListRow: View {
                                         .stroke(Color.black,lineWidth: 0.2)
                             ).shadow(radius: 5)
                             Spacer()
-                            Text("In Range")
+                            Text(self.device.inRange ? "In Range" : "Not In Range")
                                 .font(.getChalkboardSE(size: 13))
-                                .foregroundColor(Color.green)
+                                .foregroundColor(self.device.inRange ? Color.green : Color.red)
                                 .padding(.bottom,5)
                             
                         }.padding(.leading,20)
@@ -63,7 +63,7 @@ struct MyDeviceListRow: View {
                             Text(String(format: "Battery : %d%%", self.device.batteryLevel))
                                 .font(.getChalkboardSE(size: 18))
                                 .fontWeight(.bold)
-                                .foregroundColor(Color.green)
+                                .foregroundColor(self.batteryColor())
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.7)
                             
@@ -78,10 +78,38 @@ struct MyDeviceListRow: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
         
     }
+    
+    func rowColor() -> LinearGradient{
+        switch device.aproximity {
+        case .near:
+            return Color.nearDevice
+        case .close:
+            return Color.closeDevice
+        case .far:
+            return Color.farDevice
+        case .unknown:
+            return Color.farDevice
+        }
+    }
+    func batteryColor() -> Color {
+        
+        let level = device.batteryLevel
+        
+        if level <= 100 && level >= 75{
+            return Color.green
+        }else if level < 75 && level >= 20{
+            return Color.orange
+        }else if level < 20 && level >= 0{
+            return Color.red
+        }
+        return Color.gray
+    }
+    
+    
 }
 
 struct DeviceListRow_Previews: PreviewProvider {
     static var previews: some View {
-        MyDeviceListRow(device: Device(name: "Device 1", far: 1.2, batteryLevel: 100),cellHeight: 200)
+        MyDeviceListRow(device: Device(name: "Device 1", far: 2, batteryLevel:50),cellHeight: 200)
     }
 }
