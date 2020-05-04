@@ -10,8 +10,10 @@ import SwiftUI
 
 struct MyDeviceListRow: View {
     
-    @State var device : Device
+    @State var device : KnownDevice
     let cellHeight : CGFloat
+    
+    
     
     var body: some View {
         
@@ -19,8 +21,8 @@ struct MyDeviceListRow: View {
             
             RoundedRectangle(cornerRadius: 10)
                 .fill(rowColor())
-                .shadow(color: Color(UIColor.black.withAlphaComponent(0.6)),
-                radius: 5, x: 3, y: 4)
+               .shadow(color: Color(UIColor.black.withAlphaComponent(0.25)),
+                radius: 5, x: 3, y: -1)
             
             VStack(alignment: .center, spacing: 10){
                 
@@ -110,6 +112,6 @@ struct MyDeviceListRow: View {
 
 struct DeviceListRow_Previews: PreviewProvider {
     static var previews: some View {
-        MyDeviceListRow(device: Device(name: "Device 1", far: 2, batteryLevel:50),cellHeight: 200)
+        MyDeviceListRow(device: KnownDevice(name: "Device 1", far: 2, batteryLevel:50, inRange: true),cellHeight: 200)
     }
 }
