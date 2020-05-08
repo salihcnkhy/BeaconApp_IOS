@@ -11,7 +11,9 @@ import SwiftUI
 struct DeviceList: View {
     
     var deviceList : [Device]
+    
     let deviceListDecision : DeviceListDecision
+    
     var body: some View {
         List{
             ForEach(deviceList, id:\.id){ device in

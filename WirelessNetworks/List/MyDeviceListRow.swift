@@ -109,9 +109,3 @@ struct MyDeviceListRow: View {
     
     
 }
-
-struct DeviceListRow_Previews: PreviewProvider {
-    static var previews: some View {
-        MyDeviceListRow(device: KnownDevice(name: "Device 1", far: 2, batteryLevel:50, inRange: true),cellHeight: 200)
-    }
-}

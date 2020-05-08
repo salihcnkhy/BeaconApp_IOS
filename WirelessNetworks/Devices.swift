@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 
 protocol Device {
@@ -16,13 +17,15 @@ protocol Device {
     var far : Double {get}
     var batteryLevel : Int {get}
     var aproximity : Aproximity {get set}
-
+    var beacon : CLBeacon? { get set }
    
     
 }
 
 
-struct KnownDevice : Device {
+class KnownDevice : Device {
+    
+    var beacon: CLBeacon?
 
     var id: UUID = UUID()
     
@@ -36,15 +39,18 @@ struct KnownDevice : Device {
 
     var inRange : Bool
     
-    init(name : String , far : Double , batteryLevel : Int, inRange : Bool) {
-        
+    
+    init(beacon: CLBeacon?, name: String, far: Double, batteryLevel: Int, aproximity: Aproximity, inRange: Bool) {
+        self.beacon = beacon
         self.name = name
         self.far = far
         self.batteryLevel = batteryLevel
-        self.aproximity = Aproximity.getAproximityBaseFar(far: far)
+        self.aproximity = aproximity
         self.inRange = inRange
     }
     
+
+
 
     
 }
@@ -52,27 +58,32 @@ struct KnownDevice : Device {
 
 struct UnknownDevice : Device {
     
+    
+    var beacon: CLBeacon?
+    
     var id: UUID = UUID()
     
-    
-
     var name: String
     
     var far: Double
-    
+    var uuid : String
     var batteryLevel: Int
     
     var aproximity: Aproximity
     
     
     
-    init(name : String , far : Double , batteryLevel : Int) {
-        
+    init(beacon: CLBeacon?, name: String, far: Double, uuid: String, batteryLevel: Int, aproximity: Aproximity) {
+        self.beacon = beacon
         self.name = name
         self.far = far
+        self.uuid = uuid
         self.batteryLevel = batteryLevel
-        self.aproximity = Aproximity.getAproximityBaseFar(far: far)
+        self.aproximity = aproximity
     }
+    
+
+
     
 }
 enum Aproximity : String{

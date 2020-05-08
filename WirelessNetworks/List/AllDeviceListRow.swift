@@ -45,8 +45,3 @@ struct AllDeviceListRow: View {
        }
 }
 
-struct AllDeviceListRow_Previews: PreviewProvider {
-    static var previews: some View {
-        AllDeviceListRow(device: KnownDevice(name: "Device_2", far: 5, batteryLevel: 23, inRange: true), cellHeight: 100)
-    }
-}

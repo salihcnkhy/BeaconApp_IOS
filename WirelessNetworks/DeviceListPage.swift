@@ -6,19 +6,21 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct DeviceListPage: View {
     
     @State var deviceListDecision : DeviceListDecision = .MyDevices
     @State var searchText : String = ""
     
-    var deviceList : [Device] = []
+    @State var deviceList : [Device] = []
     init() {
         
-        self.deviceList = DummyList();
+        print(BluetoothTasks.shared.StartSearching(all: [CLBeaconRegion(uuid: UUID(uuidString: "59F9F7D1-86DB-4198-A623-130E931DF45B")!, major: .init(100), minor: .init(0), identifier: "BlaBla")]))
+        
+        //self.deviceList = DummyList();
         UINavigationBar.appearance().backgroundColor = .clear
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "ChalkboardSE-Bold", size: 45)!]
-        
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
         UITableView.appearance().separatorColor = .clear
@@ -41,9 +43,17 @@ struct DeviceListPage: View {
             }
             
             
+        }.onAppear{
+            NotificationCenter.default.addObserver(forName: .beaconChanges , object: nil, queue: nil, using: self.didBeaconsRefresh)
+
         }
     }
-    
+    func didBeaconsRefresh(_ notification : Notification){
+        if let devices = notification.object as? [UnknownDevice]{
+            deviceList = devices
+        }
+       
+    }
     func deviceListFilter() -> [Device]{
         var devices : [Device] = []
         devices = deviceList.filter {
@@ -133,28 +143,6 @@ struct DeviceListPage: View {
         deviceListDecision = .AllDevices
     }
     
-    
-    func DummyList() -> [Device]{
-        
-        var list : [Device] = []
-        
-        for i in 0...3 {
-            
-            list.append(KnownDevice(name: "Device_\(i)" , far: Double(i)*3.2, batteryLevel: i*i,inRange:  false))
-            
-        }
-        for i in 0...5 {
-            
-            list.append(KnownDevice(name: "Device_\(i)" , far: Double(i)*3.2, batteryLevel: i*i,inRange:  true))
-            
-        }
-        for i in 0...5 {
-            
-            list.append(UnknownDevice(name: "Device_\(i)" , far: Double(i)*3.2, batteryLevel: i*i))
-            
-        }
-        return list
-    }
     
     
     
