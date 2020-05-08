@@ -10,15 +10,13 @@ import CoreLocation
 
 struct DeviceListPage: View {
     
-    @State var deviceListDecision : DeviceListDecision = .MyDevices
     @State var searchText : String = ""
     
-    @State var deviceList : [Device] = []
+    @State var deviceList : [Device] = [Device(uuid: "59F9F7D1-86DB-4198-A623-130E931DF45B", minor: 0, major: 100, name: "Beacon")]
+    @State var foundDevices : [CLBeacon] = []
+    
     init() {
         
-        print(BluetoothTasks.shared.StartSearching(all: [CLBeaconRegion(uuid: UUID(uuidString: "59F9F7D1-86DB-4198-A623-130E931DF45B")!, major: .init(100), minor: .init(0), identifier: "BlaBla")]))
-        
-        //self.deviceList = DummyList();
         UINavigationBar.appearance().backgroundColor = .clear
         UINavigationBar.appearance().largeTitleTextAttributes = [.font : UIFont(name: "ChalkboardSE-Bold", size: 45)!]
         UITableView.appearance().backgroundColor = .clear
@@ -28,49 +26,62 @@ struct DeviceListPage: View {
     
     var body: some View {
         ZStack {
-        NavigationView{
-            GeometryReader{ geometry in
+            NavigationView{
+                GeometryReader{ geometry in
                     Color.backgroundColor.edgesIgnoringSafeArea(.all)
                     VStack{
                         self.SearchBarView(height: 35)
                             .padding([.leading,.trailing],12)
                             .padding(.bottom,5)
-                        DeviceList(deviceList: self.deviceListFilter() , deviceListDecision: self.deviceListDecision).id(UUID())
-                        }.padding(.top)
+                        DeviceList(devices: self.deviceListFilter())
+                    }.padding(.top)
                 }.navigationBarTitle("Devices")
-                    .navigationBarItems(trailing: self.ListDesicionBarButton())
                 
             }
             
             
         }.onAppear{
-            NotificationCenter.default.addObserver(forName: .beaconChanges , object: nil, queue: nil, using: self.didBeaconsRefresh)
-
+            NotificationCenter.default.addObserver(forName: .beaconFound , object: nil, queue: nil, using: self.didBeaconsRefresh)
+            
+            BluetoothTasks.shared.StartSearching(all: self.deviceList)
+            
         }
     }
     func didBeaconsRefresh(_ notification : Notification){
-        if let devices = notification.object as? [UnknownDevice]{
-            deviceList = devices
+        if var beacons = notification.object as? [CLBeacon]{
+            beacons = beacons.filter{ beacon in
+                return beacon.rssi != 0
+            }
+            print(beacons)
+            for (index, device) in deviceList.enumerated() {
+                var isFound = false
+                var foundBeacon : CLBeacon?
+                for beacon in beacons {
+                    if beacon.uuid.uuidString == device.uuid{
+                        isFound = true
+                        foundBeacon = beacon
+                        break
+                    }
+                }
+                if isFound{
+                    deviceList[index].isFound = true
+                    deviceList[index].far = foundBeacon!.accuracy.magnitude
+                }else{
+                    deviceList[index].isFound = false
+                    deviceList[index].far = 0
+
+                }
+            }
+            
         }
-       
+        
     }
+    
+    
     func deviceListFilter() -> [Device]{
         var devices : [Device] = []
-        devices = deviceList.filter {
-            
-            switch deviceListDecision{
-                
-            case .MyDevices:
-                if let device = $0 as? KnownDevice{
-                    return (device.name.lowercased(with : .current).hasPrefix(self.searchText.lowercased(with: .current)))
-                }else{
-                   return false
-                }
-            case .AllDevices:
-               return ($0.name.lowercased(with : .current).hasPrefix(self.searchText.lowercased(with: .current)))
-                
-            }
-           
+        devices = deviceList.filter { device in
+            return (device.name.lowercased(with : .current).hasPrefix(self.searchText.lowercased(with: .current)))
         }
         return devices
     }
@@ -101,49 +112,13 @@ struct DeviceListPage: View {
                     .font(.system(size: height)).foregroundColor(Color.black)
                 
             })
-         
+            
             
             
         }
         
         
     }
-    
-    
-    func AddDeviceButton(geometry : GeometryProxy) -> some View {
-        
-        return Button(action: AddDeviceAction, label:{
-            ZStack{
-                Circle().fill(Color.gray)
-                Image(systemName: "plus").font(.system(size :25)).foregroundColor(.white)
-            }
-        }).frame(width: geometry.size.width*0.15,
-            height: geometry.size.width*0.15)
-            .alignmentGuide(VerticalAlignment.center) { _ in
-                -geometry.size.height/2+geometry.size.width*0.17
-        }
-        .shadow(color: Color(UIColor.black.withAlphaComponent(0.8)),
-                radius: 3, x: 2, y: 2)
-        
-    }
-    
-    
-    func ListDesicionBarButton() -> some View{
-        
-        return Button(deviceListDecision.rawValue){
-            self.deviceListDecision = self.deviceListDecision == DeviceListDecision.MyDevices ? .AllDevices : .MyDevices
-        }.font(.getChalkboardSE(size: 20))
-    }
-    
-    
-    
-    
-    
-    func AddDeviceAction(){
-        deviceListDecision = .AllDevices
-    }
-    
-    
     
     
 }
@@ -155,11 +130,7 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-enum DeviceListDecision : String {
-      case AllDevices = "All Devices"
-      case MyDevices = "My Devices"
-  }
-  
+
 
 extension Color {
     
@@ -172,12 +143,7 @@ extension Color {
 }
 
 extension Font{
-    
-    
-    
     public static func getChalkboardSE(size : CGFloat) -> Font {
         return Font.custom("ChalkboardSE-Bold", size: size)
     }
-    
-    
 }

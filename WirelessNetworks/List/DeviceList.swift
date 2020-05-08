@@ -2,7 +2,7 @@
 //  DeviceList.swift
 //  WirelessNetworks
 //
-//  Created by Gülnur Kasarcı on 3.05.2020.
+//  Created by Gülnur Kasarcı on 8.05.2020.
 //  Copyright © 2020 Salihcan Kahya. All rights reserved.
 //
 
@@ -10,27 +10,24 @@ import SwiftUI
 
 struct DeviceList: View {
     
-    var deviceList : [Device]
-    
-    let deviceListDecision : DeviceListDecision
-    
+    var devices : [Device]
+
     var body: some View {
         List{
-            ForEach(deviceList, id:\.id){ device in
-                self.returnRow(device : device)
+            
+            ForEach(devices) { device in
+                withAnimation{
+                    ListRow(device: device, cellHeight: 150).listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
+                }
+              
             }
-        }
-    }
-    
-    func returnRow(device : Device) -> AnyView{
-        
-        switch deviceListDecision {
-        case .MyDevices:
-            return AnyView(MyDeviceListRow(device : device as! KnownDevice , cellHeight : 200))
-        case .AllDevices:
-            return AnyView(AllDeviceListRow(device: device, cellHeight: 100))
-       
+            
+        }.id(UUID())
     }
 }
-    
+
+struct DeviceList_Previews: PreviewProvider {
+    static var previews: some View {
+        DeviceList(devices: [Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan"),Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan2"),Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan3"),Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan4")])
+    }
 }

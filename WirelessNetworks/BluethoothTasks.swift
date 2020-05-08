@@ -20,30 +20,37 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     private var locationManager = CLLocationManager()
     
     private var AuthStatus : CLAuthorizationStatus!
-    
-    private var foundBeaconList : [Device] = []
-    
+        
     private override init() {
         super.init()
         locationManager.delegate = self
     }
+    private func createBeaconRegion(from deviceList : [Device]) -> [CLBeaconRegion]{
+        var region = [CLBeaconRegion]()
+        for device in deviceList {
+            region.append(CLBeaconRegion(uuid: UUID(uuidString: device.uuid)!, major: .init(device.major), minor: .init(device.minor), identifier: device.name))
+        }
+        return region
+    }
     
-    public func StartSearching(all beaconRegion : [CLBeaconRegion]) -> Bool{
+    public func StartSearching(all deviceList : [Device]){
+        
+        let beaconRegion = createBeaconRegion(from: deviceList)
         
               if checkManagerAvailable() {
                 for beacon in beaconRegion{
-                    print("Seaching")
                     locationManager.startMonitoring(for: beacon)
                     locationManager.startRangingBeacons(satisfying: beacon.beaconIdentityConstraint)
                 }
-                return true
               }else{
               GetPermission()
-            return false
           }
           
       }
-    public func StopSearching(all beaconRegion : [CLBeaconRegion]){
+    public func StopSearching(all deviceList : [Device]){
+        
+        let beaconRegion = createBeaconRegion(from: deviceList)
+
         for beacon in beaconRegion{
             locationManager.stopMonitoring(for: beacon)
             locationManager.stopRangingBeacons(satisfying: beacon.beaconIdentityConstraint)
@@ -67,16 +74,8 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     }
      
     func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying beaconConstraint: CLBeaconIdentityConstraint) {
-        print("---DidRange---")
-        print(beacons)
-        foundBeaconList.removeAll(keepingCapacity: false)
-        for beacon in beacons {
-            foundBeaconList.append(UnknownDevice(beacon: beacon, name: beacon.description, far: beacon.accuracy.magnitude, uuid: beacon.uuid.uuidString, batteryLevel: 100, aproximity: .far))
-        }
-         
-        NotificationCenter.default.post(name: .beaconChanges , object: foundBeaconList)
-
-        print("--------------\n")
+        
+        NotificationCenter.default.post(name: .beaconFound , object: beacons)
 
     }
     
@@ -92,5 +91,5 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     
 }
 extension Notification.Name {
-    static let beaconChanges = Notification.Name(rawValue: "BeaconChanges")
+    static let beaconFound = Notification.Name(rawValue: "BeaconsFound")
 }
