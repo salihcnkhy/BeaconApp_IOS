@@ -26,8 +26,4 @@ struct DeviceList: View {
     }
 }
 
-struct DeviceList_Previews: PreviewProvider {
-    static var previews: some View {
-        DeviceList(devices: [Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan"),Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan2"),Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan3"),Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan4")])
-    }
-}
+

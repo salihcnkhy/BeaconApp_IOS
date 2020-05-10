@@ -7,13 +7,40 @@
 
 import SwiftUI
 import CoreLocation
+extension AnyTransition {
+    static var moveAndFade: AnyTransition {
+        let insertion = AnyTransition.move(edge: .bottom)
+        let removal = AnyTransition.move(edge :.bottom)
+        return .asymmetric(insertion: insertion, removal: removal)
+    }
+}
+
 
 struct DeviceListPage: View {
     
+    @Environment (\.colorScheme) var colorScheme: ColorScheme
+    
     @State var searchText : String = ""
     
-    @State var deviceList : [Device] = [Device(uuid: "59F9F7D1-86DB-4198-A623-130E931DF45B", minor: 0, major: 100, name: "Beacon")]
+    @State var deviceList : [Device] = [Device(uuid: UUID(uuidString: "59F9F7D1-86DB-4198-A623-130E931DF45B")!, minor: 0, major: 100, name: "Beacon")] {
+        willSet{
+
+        }
+    }
     @State var foundDevices : [CLBeacon] = []
+    @State var isAddViewShowing = false {
+        didSet{
+            if(self.isAddViewShowing){
+                print("True oldu arama yapma")
+                BluetoothTasks.shared.StopSearching(all: self.deviceList)
+            }else{
+                print("false oldu arama yap")
+                BluetoothTasks.shared.StartSearching(all: self.deviceList, notificationName: .beaconsFound)
+
+            }
+            
+        }
+    }
     
     init() {
         
@@ -24,43 +51,58 @@ struct DeviceListPage: View {
         UITableView.appearance().separatorColor = .clear
     }
     
+    
     var body: some View {
-        ZStack {
-            NavigationView{
-                GeometryReader{ geometry in
-                    Color.backgroundColor.edgesIgnoringSafeArea(.all)
-                    VStack{
-                        self.SearchBarView(height: 35)
-                            .padding([.leading,.trailing],12)
-                            .padding(.bottom,5)
-                        DeviceList(devices: self.deviceListFilter())
-                    }.padding(.top)
-                }.navigationBarTitle("Devices")
+        NavigationView{
+            
+            GeometryReader{ geometry in
+                Color.backgroundColor.edgesIgnoringSafeArea(.all)
                 
-            }
+                VStack{
+                    SeachbarView(barHeight: 35, searchText: self.$searchText)
+                        .padding([.leading,.trailing],12)
+                        .padding(.bottom,5)
+                    DeviceList(devices: self.deviceListFilter())
+                }.padding(.top)
+                if self.isAddViewShowing{
+                    DeviceAddView(cellHeight: geometry.size.height+15, deviceList: self.$deviceList,isAddViewShowing: self.$isAddViewShowing).transition(.moveAndFade).zIndex(1)
+                }
+                
+            }.navigationBarTitle(self.isAddViewShowing ? "Add Device" : "Devices").navigationBarItems(trailing: addButton())
             
-            
-        }.onAppear{
-            NotificationCenter.default.addObserver(forName: .beaconFound , object: nil, queue: nil, using: self.didBeaconsRefresh)
-            
-            BluetoothTasks.shared.StartSearching(all: self.deviceList)
-            
+        }.environment(\.colorScheme, colorScheme == .dark ? .light : .light)
+            .onAppear{
+                NotificationCenter.default.addObserver(forName: .beaconsFound , object: nil, queue: nil, using: self.didBeaconsRefresh)
+                BluetoothTasks.shared.StartSearching(all: self.deviceList, notificationName: .beaconsFound)
+                
         }
     }
+    
+    func addButton() -> some View {
+        return Button(action: {
+            withAnimation{
+                self.isAddViewShowing.toggle()
+            }
+        }, label: {
+            self.isAddViewShowing ?
+                AnyView(Text("Close").font(.system(size: 20)).animation(.spring()))
+                : AnyView(Image(systemName: "plus").font(.system(size: 30)))
+            
+        })
+    }
+    
     func didBeaconsRefresh(_ notification : Notification){
         if var beacons = notification.object as? [CLBeacon]{
             beacons = beacons.filter{ beacon in
                 return beacon.rssi != 0
             }
-            print(beacons)
             for (index, device) in deviceList.enumerated() {
                 var isFound = false
                 var foundBeacon : CLBeacon?
                 for beacon in beacons {
-                    if beacon.uuid.uuidString == device.uuid{
+                    if beacon.uuid == device.uuid{
                         isFound = true
                         foundBeacon = beacon
-                        break
                     }
                 }
                 if isFound{
@@ -69,14 +111,10 @@ struct DeviceListPage: View {
                 }else{
                     deviceList[index].isFound = false
                     deviceList[index].far = 0
-
                 }
             }
-            
         }
-        
     }
-    
     
     func deviceListFilter() -> [Device]{
         var devices : [Device] = []
@@ -85,41 +123,6 @@ struct DeviceListPage: View {
         }
         return devices
     }
-    
-    func SearchBarView(height : CGFloat) -> some View{
-        
-        return HStack {
-            HStack(alignment: .center){
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: height/2)).padding()
-                
-                TextField("Search", text: self.$searchText)
-                    .font(.getChalkboardSE(size: height/2))
-                    .offset(x: 0, y: -2)
-                
-            }.overlay(
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color.black,lineWidth: 1)
-                    .frame(height : height)
-            ).frame(height : height)
-                .padding(.trailing,7)
-            
-            Button(action: {
-                
-            }, label: {
-                
-                Image(systemName: "slider.horizontal.3")
-                    .font(.system(size: height)).foregroundColor(Color.black)
-                
-            })
-            
-            
-            
-        }
-        
-        
-    }
-    
     
 }
 

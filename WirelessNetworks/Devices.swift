@@ -15,13 +15,13 @@ struct Device : Identifiable {
     
     
     let id = UUID()
-    var uuid : String
+    var uuid : UUID
     var minor : Int
     var major : Int
     var name : String
     var isFound : Bool = false
     var far : Double = 0
-init(uuid: String, minor: Int, major: Int, name: String) {
+init(uuid: UUID, minor: Int, major: Int, name: String) {
         self.uuid = uuid
         self.minor = minor
         self.major = major

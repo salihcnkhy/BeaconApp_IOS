@@ -32,7 +32,7 @@ struct ListRow: View {
                     .foregroundColor(Color.orange)
                     .padding(.top,5)
                 
-                Text.ChalkboardSEText(label: device.uuid, fontSize: 20)
+                Text.ChalkboardSEText(label: device.uuid.uuidString, fontSize: 20)
                     .foregroundColor(Color.gray)
                     .padding(.top,5)
                 HStack{
@@ -58,8 +58,3 @@ extension Text {
     
 }
 
-struct ListRow_Previews: PreviewProvider {
-    static var previews: some View {
-        ListRow(device : Device(uuid: "xxxxxxxxxx-xxxx-xxx", minor: 2, major: 200, name: "Cüzdan"),cellHeight: 150)
-    }
-}

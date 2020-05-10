@@ -10,6 +10,9 @@
 		184742F324659FCE008E5967 /* DeviceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184742F224659FCE008E5967 /* DeviceList.swift */; };
 		184742F52465A418008E5967 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184742F42465A418008E5967 /* ListRow.swift */; };
 		596DC35D2461DD9A00C34718 /* BluethoothTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC35C2461DD9A00C34718 /* BluethoothTasks.swift */; };
+		596DC36B24662C1500C34718 /* DeviceAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC36A24662C1500C34718 /* DeviceAddView.swift */; };
+		596DC3702466E91000C34718 /* SeachbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC36F2466E91000C34718 /* SeachbarView.swift */; };
+		596DC3742466F15500C34718 /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC3732466F15500C34718 /* RoundedTextField.swift */; };
 		59F249CE245E0A9200F0950A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F249CD245E0A9200F0950A /* AppDelegate.swift */; };
 		59F249D0245E0A9200F0950A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F249CF245E0A9200F0950A /* SceneDelegate.swift */; };
 		59F249D3245E0A9200F0950A /* WirelessNetworks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 59F249D1245E0A9200F0950A /* WirelessNetworks.xcdatamodeld */; };
@@ -25,6 +28,9 @@
 		184742F42465A418008E5967 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		596DC35C2461DD9A00C34718 /* BluethoothTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluethoothTasks.swift; sourceTree = "<group>"; };
 		596DC3642461E35200C34718 /* WirelessNetworks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WirelessNetworks.entitlements; sourceTree = "<group>"; };
+		596DC36A24662C1500C34718 /* DeviceAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAddView.swift; sourceTree = "<group>"; };
+		596DC36F2466E91000C34718 /* SeachbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeachbarView.swift; sourceTree = "<group>"; };
+		596DC3732466F15500C34718 /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
 		59F249CA245E0A9200F0950A /* WirelessNetworks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WirelessNetworks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59F249CD245E0A9200F0950A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		59F249CF245E0A9200F0950A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +63,15 @@
 			path = List;
 			sourceTree = "<group>";
 		};
+		596DC36E2466E8FF00C34718 /* SupportViews */ = {
+			isa = PBXGroup;
+			children = (
+				596DC36F2466E91000C34718 /* SeachbarView.swift */,
+				596DC3732466F15500C34718 /* RoundedTextField.swift */,
+			);
+			path = SupportViews;
+			sourceTree = "<group>";
+		};
 		59F249C1245E0A9200F0950A = {
 			isa = PBXGroup;
 			children = (
@@ -76,9 +91,11 @@
 		59F249CC245E0A9200F0950A /* WirelessNetworks */ = {
 			isa = PBXGroup;
 			children = (
+				596DC36E2466E8FF00C34718 /* SupportViews */,
 				596DC3642461E35200C34718 /* WirelessNetworks.entitlements */,
 				1882992D245E26830017A478 /* List */,
 				59F249D4245E0A9200F0950A /* DeviceListPage.swift */,
+				596DC36A24662C1500C34718 /* DeviceAddView.swift */,
 				59F249E4245F53C700F0950A /* Devices.swift */,
 				596DC35C2461DD9A00C34718 /* BluethoothTasks.swift */,
 				59F249CD245E0A9200F0950A /* AppDelegate.swift */,
@@ -171,11 +188,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				596DC36B24662C1500C34718 /* DeviceAddView.swift in Sources */,
 				596DC35D2461DD9A00C34718 /* BluethoothTasks.swift in Sources */,
 				59F249D3245E0A9200F0950A /* WirelessNetworks.xcdatamodeld in Sources */,
+				596DC3702466E91000C34718 /* SeachbarView.swift in Sources */,
 				59F249E5245F53C700F0950A /* Devices.swift in Sources */,
 				59F249CE245E0A9200F0950A /* AppDelegate.swift in Sources */,
 				184742F52465A418008E5967 /* ListRow.swift in Sources */,
+				596DC3742466F15500C34718 /* RoundedTextField.swift in Sources */,
 				59F249D5245E0A9200F0950A /* DeviceListPage.swift in Sources */,
 				59F249D0245E0A9200F0950A /* SceneDelegate.swift in Sources */,
 				184742F324659FCE008E5967 /* DeviceList.swift in Sources */,

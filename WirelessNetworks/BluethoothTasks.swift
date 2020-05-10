@@ -20,6 +20,8 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     private var locationManager = CLLocationManager()
     
     private var AuthStatus : CLAuthorizationStatus!
+    
+    private var notificationName : Notification.Name?
         
     private override init() {
         super.init()
@@ -28,15 +30,15 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     private func createBeaconRegion(from deviceList : [Device]) -> [CLBeaconRegion]{
         var region = [CLBeaconRegion]()
         for device in deviceList {
-            region.append(CLBeaconRegion(uuid: UUID(uuidString: device.uuid)!, major: .init(device.major), minor: .init(device.minor), identifier: device.name))
+            region.append(CLBeaconRegion(uuid: device.uuid, major: .init(device.major), minor: .init(device.minor), identifier: device.name))
         }
         return region
     }
     
-    public func StartSearching(all deviceList : [Device]){
+    public func StartSearching(all deviceList : [Device], notificationName name : Notification.Name){
         
+        self.notificationName = name
         let beaconRegion = createBeaconRegion(from: deviceList)
-        
               if checkManagerAvailable() {
                 for beacon in beaconRegion{
                     locationManager.startMonitoring(for: beacon)
@@ -47,6 +49,7 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
           }
           
       }
+    
     public func StopSearching(all deviceList : [Device]){
         
         let beaconRegion = createBeaconRegion(from: deviceList)
@@ -74,8 +77,7 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     }
      
     func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying beaconConstraint: CLBeaconIdentityConstraint) {
-        
-        NotificationCenter.default.post(name: .beaconFound , object: beacons)
+        NotificationCenter.default.post(name: self.notificationName! , object: beacons)
 
     }
     
@@ -91,5 +93,6 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     
 }
 extension Notification.Name {
-    static let beaconFound = Notification.Name(rawValue: "BeaconsFound")
+    static let beaconsFound = Notification.Name(rawValue: "BeaconsFound")
+    static let beaconFound = Notification.Name(rawValue: "BeaconFound")
 }
