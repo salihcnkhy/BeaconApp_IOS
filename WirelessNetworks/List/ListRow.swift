@@ -45,7 +45,7 @@ struct ListRow: View {
                 
                 
             }}.frame(height : cellHeight)
-            .padding([.leading,.trailing],10.0)
+            .padding([.leading,.trailing],10)
     }
 }
 

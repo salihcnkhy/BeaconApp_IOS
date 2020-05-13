@@ -10,13 +10,13 @@ import SwiftUI
 
 struct DeviceAddView: View {
     
-    let cellHeight : CGFloat
-    @Binding var deviceList : [Device]
+    @ObservedObject var deviceList = Devices()
     @Binding var isAddViewShowing : Bool
     @State var uuidText = "59F9F7D1-86DB-4198-A623-130E931DF45B"
     @State var nameText = ""
     @State var majorText = "100"
     @State var minorText = "0"
+
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 15).fill(Color.white)
@@ -32,7 +32,7 @@ struct DeviceAddView: View {
                     if let uuid = UUID(uuidString: self.uuidText){
                         if let minor = Int(self.minorText), let major = Int(self.majorText){
                             let newDevice = Device(uuid: uuid, minor: minor, major: major, name: self.nameText)
-                            self.deviceList.append(newDevice)
+                            self.deviceList.allDevices.append(newDevice)
                             withAnimation{
                                 self.isAddViewShowing = false
                             }
@@ -42,10 +42,8 @@ struct DeviceAddView: View {
                     RoundedRectangle(cornerRadius: 10).stroke(Color.gray , lineWidth: 0.4).overlay(Text("Done"))
                 }).frame(height : 50)
             }.padding([.trailing,.leading],20)
-        }.frame(height : cellHeight)
-            .padding([.leading,.trailing],10.0).onAppear{
-                
-        }
+        }.environment(\.colorScheme, .light)
+            
     }
     
     

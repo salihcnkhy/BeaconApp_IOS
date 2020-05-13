@@ -15,7 +15,8 @@ import SwiftUI
 class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     
     public static let shared = BluetoothTasks()
-    
+    @ObservedObject var deviceList = Devices()
+
     
     private var locationManager = CLLocationManager()
     
@@ -26,6 +27,9 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     private override init() {
         super.init()
         locationManager.delegate = self
+        locationManager.allowsBackgroundLocationUpdates = true
+        GetPermission()
+
     }
     private func createBeaconRegion(from deviceList : [Device]) -> [CLBeaconRegion]{
         var region = [CLBeaconRegion]()
@@ -35,24 +39,21 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
         return region
     }
     
-    public func StartSearching(all deviceList : [Device], notificationName name : Notification.Name){
+    public func StartSearching(notificationName name : Notification.Name){
         
         self.notificationName = name
-        let beaconRegion = createBeaconRegion(from: deviceList)
+        let beaconRegion = createBeaconRegion(from: deviceList.allDevices)
               if checkManagerAvailable() {
                 for beacon in beaconRegion{
                     locationManager.startMonitoring(for: beacon)
                     locationManager.startRangingBeacons(satisfying: beacon.beaconIdentityConstraint)
                 }
-              }else{
-              GetPermission()
-          }
-          
+              }
       }
     
-    public func StopSearching(all deviceList : [Device]){
+    public func StopSearching(){
         
-        let beaconRegion = createBeaconRegion(from: deviceList)
+        let beaconRegion = createBeaconRegion(from: deviceList.allDevices)
 
         for beacon in beaconRegion{
             locationManager.stopMonitoring(for: beacon)
@@ -82,10 +83,12 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        print("region enter")
         
     }
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        
+        print("region exit")
+
     }
     
     
