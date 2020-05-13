@@ -60,6 +60,7 @@ class Devices : ObservableObject {
     @Published var allDevices : [Device]
     
     init() {
+        print("Devices Created")
         self.allDevices = [Device(uuid: UUID(uuidString: "59F9F7D1-86DB-4198-A623-130E931DF45B")!, minor: 0, major: 100, name: "Beacon")]
     }
     

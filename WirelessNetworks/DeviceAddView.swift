@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DeviceAddView: View {
     
-    @ObservedObject var deviceList = Devices()
+    @EnvironmentObject var deviceList : Devices
     @Binding var isAddViewShowing : Bool
     @State var uuidText = "59F9F7D1-86DB-4198-A623-130E931DF45B"
     @State var nameText = ""

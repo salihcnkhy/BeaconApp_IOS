@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         center.getNotificationSettings { (settings) in
           if settings.authorizationStatus != .authorized {
             // Notifications not allowed
+            print("Not allowed")
           }
         }
 
@@ -99,4 +100,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-

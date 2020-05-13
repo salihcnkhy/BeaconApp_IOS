@@ -15,7 +15,6 @@ import SwiftUI
 class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
     
     public static let shared = BluetoothTasks()
-    @ObservedObject var deviceList = Devices()
 
     
     private var locationManager = CLLocationManager()
@@ -39,10 +38,10 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
         return region
     }
     
-    public func StartSearching(notificationName name : Notification.Name){
+    public func StartSearching(all deviceList : [Device],notificationName name : Notification.Name){
         
         self.notificationName = name
-        let beaconRegion = createBeaconRegion(from: deviceList.allDevices)
+        let beaconRegion = createBeaconRegion(from: deviceList)
               if checkManagerAvailable() {
                 for beacon in beaconRegion{
                     locationManager.startMonitoring(for: beacon)
@@ -51,9 +50,9 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
               }
       }
     
-    public func StopSearching(){
+    public func StopSearching(all deviceList : [Device]){
         
-        let beaconRegion = createBeaconRegion(from: deviceList.allDevices)
+        let beaconRegion = createBeaconRegion(from: deviceList)
 
         for beacon in beaconRegion{
             locationManager.stopMonitoring(for: beacon)
@@ -79,7 +78,6 @@ class BluetoothTasks : NSObject ,ObservableObject , CLLocationManagerDelegate{
      
     func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying beaconConstraint: CLBeaconIdentityConstraint) {
         NotificationCenter.default.post(name: self.notificationName! , object: beacons)
-
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {

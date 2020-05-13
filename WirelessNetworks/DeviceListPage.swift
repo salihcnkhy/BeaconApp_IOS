@@ -14,16 +14,16 @@ struct DeviceListPage: View {
     
     @State var searchText : String = ""
     
-    @ObservedObject var deviceList = Devices()
+    @EnvironmentObject var deviceList : Devices
     
     @State var isAddViewShowing = false {
         willSet{
             if(newValue){
                 print("True oldu arama yapma")
-                BluetoothTasks.shared.StopSearching()
+                BluetoothTasks.shared.StopSearching(all: self.deviceList.allDevices)
             }else{
                 print("false oldu arama yap")
-                BluetoothTasks.shared.StartSearching(notificationName: .beaconsFound)
+                BluetoothTasks.shared.StartSearching(all: self.deviceList.allDevices , notificationName: .beaconsFound)
             }
         }
     }
@@ -47,28 +47,19 @@ struct DeviceListPage: View {
                         .padding(.bottom,5)
                     DeviceList(devices: self.deviceListFilter())
                 }.padding(.top)
-<<<<<<< HEAD
-                if self.isAddViewShowing{
-                    DeviceAddView(cellHeight: geometry.size.height+15, deviceList: self.$deviceList,isAddViewShowing: self.$isAddViewShowing).transition(.moveAndFade).zIndex(1)
-                }
-                
-            }.navigationBarTitle(self.isAddViewShowing ? "Add Device" : "Devices").navigationBarItems(trailing: addButton())
-            
-        }.environment(\.colorScheme, colorScheme == .dark ? .light : .light)
-            .onAppear{
-                NotificationCenter.default.addObserver(forName: .beaconsFound , object: nil, queue: nil, using: self.didBeaconsRefresh)
-                BluetoothTasks.shared.StartSearching(all: self.deviceList, notificationName: .beaconsFound)
-=======
             }.navigationBarTitle("Devices").navigationBarItems(trailing: addButton())
                 .sheet(isPresented: self.$isAddViewShowing, onDismiss: {
                     self.isAddViewShowing = false
-                } ){
-                    DeviceAddView(isAddViewShowing: self.$isAddViewShowing)}
->>>>>>> 2c38e755a7ec571effebd2533388f98dc0fec864
+                }){
+                    
+                    DeviceAddView(isAddViewShowing: self.$isAddViewShowing).environmentObject(self.deviceList).onAppear{
+                        self.isAddViewShowing = true
+
+                    }}
         }
         .onAppear{
             NotificationCenter.default.addObserver(forName: .beaconsFound , object: nil, queue: nil, using: self.didBeaconsRefresh)
-            BluetoothTasks.shared.StartSearching(notificationName: .beaconsFound)
+            BluetoothTasks.shared.StartSearching(all: self.deviceList.allDevices ,notificationName: .beaconsFound)
         }.environment(\.colorScheme, .light)
     }
     
@@ -76,14 +67,8 @@ struct DeviceListPage: View {
         return Button(action: {
             self.isAddViewShowing.toggle()
         }, label: {
-<<<<<<< HEAD
-            self.isAddViewShowing ?
-                AnyView(Text("Close").font(.system(size: 20)).animation(.spring()))
-                : AnyView(Image(systemName: "plus").font(.system(size: 30)))
-=======
             Image(systemName: "plus")
                 .font(.system(size: 30))
->>>>>>> 2c38e755a7ec571effebd2533388f98dc0fec864
         })
     }
     
