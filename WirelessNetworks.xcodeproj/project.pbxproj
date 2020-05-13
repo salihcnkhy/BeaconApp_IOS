@@ -13,6 +13,9 @@
 		596DC36B24662C1500C34718 /* DeviceAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC36A24662C1500C34718 /* DeviceAddView.swift */; };
 		596DC3702466E91000C34718 /* SeachbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC36F2466E91000C34718 /* SeachbarView.swift */; };
 		596DC3742466F15500C34718 /* RoundedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596DC3732466F15500C34718 /* RoundedTextField.swift */; };
+		5985FFAA2469886200DA9D67 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5985FFA92469886200DA9D67 /* ColorExtensions.swift */; };
+		5985FFAC2469887000DA9D67 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5985FFAB2469887000DA9D67 /* FontExtensions.swift */; };
+		5985FFAE2469887B00DA9D67 /* AnimationExtensios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5985FFAD2469887B00DA9D67 /* AnimationExtensios.swift */; };
 		59F249CE245E0A9200F0950A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F249CD245E0A9200F0950A /* AppDelegate.swift */; };
 		59F249D0245E0A9200F0950A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F249CF245E0A9200F0950A /* SceneDelegate.swift */; };
 		59F249D3245E0A9200F0950A /* WirelessNetworks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 59F249D1245E0A9200F0950A /* WirelessNetworks.xcdatamodeld */; };
@@ -31,6 +34,9 @@
 		596DC36A24662C1500C34718 /* DeviceAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAddView.swift; sourceTree = "<group>"; };
 		596DC36F2466E91000C34718 /* SeachbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeachbarView.swift; sourceTree = "<group>"; };
 		596DC3732466F15500C34718 /* RoundedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedTextField.swift; sourceTree = "<group>"; };
+		5985FFA92469886200DA9D67 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		5985FFAB2469887000DA9D67 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
+		5985FFAD2469887B00DA9D67 /* AnimationExtensios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationExtensios.swift; sourceTree = "<group>"; };
 		59F249CA245E0A9200F0950A /* WirelessNetworks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WirelessNetworks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59F249CD245E0A9200F0950A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		59F249CF245E0A9200F0950A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +78,16 @@
 			path = SupportViews;
 			sourceTree = "<group>";
 		};
+		5985FFA82468A3A400DA9D67 /* MiscExtentions */ = {
+			isa = PBXGroup;
+			children = (
+				5985FFA92469886200DA9D67 /* ColorExtensions.swift */,
+				5985FFAB2469887000DA9D67 /* FontExtensions.swift */,
+				5985FFAD2469887B00DA9D67 /* AnimationExtensios.swift */,
+			);
+			path = MiscExtentions;
+			sourceTree = "<group>";
+		};
 		59F249C1245E0A9200F0950A = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +107,7 @@
 		59F249CC245E0A9200F0950A /* WirelessNetworks */ = {
 			isa = PBXGroup;
 			children = (
+				5985FFA82468A3A400DA9D67 /* MiscExtentions */,
 				596DC36E2466E8FF00C34718 /* SupportViews */,
 				596DC3642461E35200C34718 /* WirelessNetworks.entitlements */,
 				1882992D245E26830017A478 /* List */,
@@ -195,10 +212,13 @@
 				59F249E5245F53C700F0950A /* Devices.swift in Sources */,
 				59F249CE245E0A9200F0950A /* AppDelegate.swift in Sources */,
 				184742F52465A418008E5967 /* ListRow.swift in Sources */,
+				5985FFAC2469887000DA9D67 /* FontExtensions.swift in Sources */,
 				596DC3742466F15500C34718 /* RoundedTextField.swift in Sources */,
+				5985FFAE2469887B00DA9D67 /* AnimationExtensios.swift in Sources */,
 				59F249D5245E0A9200F0950A /* DeviceListPage.swift in Sources */,
 				59F249D0245E0A9200F0950A /* SceneDelegate.swift in Sources */,
 				184742F324659FCE008E5967 /* DeviceList.swift in Sources */,
+				5985FFAA2469886200DA9D67 /* ColorExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

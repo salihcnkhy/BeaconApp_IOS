@@ -20,9 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Get the managed object context from the shared persistent container.
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
-        BluetoothTasks.shared.GetPermission()
-        let contentView = DeviceListPage().environment(\.managedObjectContext, context)
+        
+        let allDevices = Devices()
+        let contentView = DeviceListPage().environment(\.managedObjectContext, context).environment(\.colorScheme, .light).environmentObject(allDevices)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
