@@ -74,7 +74,6 @@ struct DeviceListPage: View {
             .onAppear{
                 NotificationCenter.default.addObserver(forName: .beaconsFound , object: nil, queue: nil, using: self.didBeaconsRefresh)
                 BluetoothTasks.shared.StartSearching(all: self.deviceList, notificationName: .beaconsFound)
-                
         }
     }
     
@@ -87,7 +86,6 @@ struct DeviceListPage: View {
             self.isAddViewShowing ?
                 AnyView(Text("Close").font(.system(size: 20)).animation(.spring()))
                 : AnyView(Image(systemName: "plus").font(.system(size: 30)))
-            
         })
     }
     
